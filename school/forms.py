@@ -1,4 +1,5 @@
 from django import forms
+import phonenumbers
 
 
 class StudentForm(forms.Form):
@@ -12,7 +13,6 @@ class StudentForm(forms.Form):
 
     phone_number = forms.CharField(
         label="Phone number",
-        widget=forms.TextInput(attrs={"placeholder": "example"})
     )
 
     def clean(self):
@@ -29,3 +29,18 @@ class StudentForm(forms.Form):
         phone_number = cleaned_data.get("phone_number")
         if len(phone_number) > 25:
             raise forms.ValidationError("Phone number should be 25 characters or less.")
+
+        return cleaned_data
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get("phone_number")
+
+        if len(phone_number) > 25:
+            raise forms.ValidationError("Phone number should be 25 characters or less.")
+
+        try:
+            parsed = phonenumbers.parse(phone_number, region=None)
+        except phonenumbers.NumberParseException as error:
+            raise forms.ValidationError(error.args[0])
+
+        return phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.INTERNATIONAL)

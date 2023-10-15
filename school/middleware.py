@@ -1,5 +1,7 @@
 import time
 
+from . write_dict_to_file import write
+
 
 class LogMiddleware:
     def __init__(self, get_response):
@@ -7,11 +9,6 @@ class LogMiddleware:
         # One-time configuration and initialization.
 
     def __call__(self, request):
-        """Миддлвар должен получить request.path, request.method и execution_time. Как это сделать?
-
-        :param request:
-        :return:
-        """
         # Code to be executed for each request before
         # the view (and later middleware) are called.
         start_time = time.time()
@@ -25,7 +22,6 @@ class LogMiddleware:
         # Code to be executed for each request/response after
         # the view is called.
         data["execution_time"] = time.time() - start_time
-
-        print(data)
+        write(data)
 
         return response
