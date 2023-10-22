@@ -1,6 +1,7 @@
+from datetime import datetime
 import time
 
-from . write_dict_to_file import write
+from . write import write_to_file, write_to_db
 
 
 class LogMiddleware:
@@ -13,6 +14,7 @@ class LogMiddleware:
         # the view (and later middleware) are called.
         start_time = time.time()
         data = {
+            "date_and_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "request_path": request.path,
             "request_method": request.method
         }
@@ -22,6 +24,8 @@ class LogMiddleware:
         # Code to be executed for each request/response after
         # the view is called.
         data["execution_time"] = time.time() - start_time
-        write(data)
+
+        write_to_file(data)
+        write_to_db(data)
 
         return response

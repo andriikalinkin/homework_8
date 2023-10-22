@@ -18,6 +18,8 @@ def student_add(request):
             student_create.save()
             return redirect("/students/")
 
+        return render(request, "student_add.html", {"form": form})
+
     form = StudentForm()  # if request.method == "GET"
     return render(request, "student_add.html", {"form": form})
 

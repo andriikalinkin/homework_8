@@ -9,6 +9,7 @@ class Student(models.Model):
 
 
 class Log(models.Model):
+    date_and_time = models.DateTimeField(null=True)
     request_path = models.CharField(max_length=50)
     request_method = models.CharField(max_length=50)
     execution_time = models.CharField(max_length=50)

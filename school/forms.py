@@ -15,20 +15,19 @@ class StudentForm(forms.Form):
         label="Phone number",
     )
 
-    def clean(self):
-        cleaned_data = super().clean()
+    def clean_first_name(self):
+        cleaned_data = self.cleaned_data.get('first_name')
 
-        first_name = cleaned_data.get("first_name")
-        if len(first_name) > 25:
+        if len(cleaned_data) > 25:
             raise forms.ValidationError("First name should be 25 characters or less.")
 
-        last_name = cleaned_data.get("last_name")
-        if len(last_name) > 25:
-            raise forms.ValidationError("Last name should be 25 characters or less.")
+        return cleaned_data
 
-        phone_number = cleaned_data.get("phone_number")
-        if len(phone_number) > 25:
-            raise forms.ValidationError("Phone number should be 25 characters or less.")
+    def clean_last_name(self):
+        cleaned_data = self.cleaned_data.get('last_name')
+
+        if len(cleaned_data) > 25:
+            raise forms.ValidationError("Last name should be 25 characters or less.")
 
         return cleaned_data
 
